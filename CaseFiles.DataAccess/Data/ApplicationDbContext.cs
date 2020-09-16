@@ -16,5 +16,6 @@ namespace CaseFiles.Data
 
         public DbSet<Case> Cases { get; set; }
         public DbSet<Note> Notes { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

@@ -92,3 +92,7 @@ body {
 .warning-login {
     color: #F4A261;
 }
+
+.model-error-ul > ul {
+    padding-left: 13px;
+}

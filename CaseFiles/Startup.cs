@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using CaseFiles.Data;
 using CaseFiles.DataAccess.Repositories;
 using CaseFiles.DataAccess;
+using CaseFiles.DataAccess.Data;
 
 namespace CaseFiles
 {
@@ -36,16 +37,15 @@ namespace CaseFiles
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddControllersWithViews()
-                .AddRazorRuntimeCompilation();
-
+            services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -58,6 +58,9 @@ namespace CaseFiles
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            dbInitializer.Initialize();
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

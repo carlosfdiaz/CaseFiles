@@ -1,4 +1,5 @@
 ﻿using CaseFiles.Data;
+using CaseFiles.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,7 +20,7 @@ namespace CaseFiles.DataAccess.Data
             _userManager = userManager;
         }
 
-        public void Initialize()
+        public async void Initialize()
         {
             try
             {
@@ -33,7 +34,15 @@ namespace CaseFiles.DataAccess.Data
 
             }
 
-            
+            _userManager.CreateAsync(new ApplicationUser
+            {
+                UserName = "explorer@casefiles.com",
+                Email = "explorer@casefiles.com",
+                Name = "Explorer",
+                EmailConfirmed = true
+            }, "Letmein123!").GetAwaiter().GetResult();
+
+            await _db.SaveChangesAsync();
         }
     }
 }
